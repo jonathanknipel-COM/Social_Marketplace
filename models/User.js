@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
 
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true //prevents people from logging in with the same email address.
     },
 
     password: {
@@ -28,7 +29,7 @@ const userSchema = new mongoose.Schema({
 
     isAdmin: {
         type: Boolean,
-        default: false
+        default: false //regular users are not admins by default.
     },
 
     itemsDonated: [{
@@ -40,6 +41,6 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
     }]
-}, {timestamps: true});
+}, {timestamps: true}); //automatically create timestamps
 
 module.exports = mongoose.model('User', userSchema);
