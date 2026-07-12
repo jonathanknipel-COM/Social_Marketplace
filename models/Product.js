@@ -24,7 +24,7 @@ const productSchema = new mongoose.Schema({
     status: {
         type: String,
         enum: ['available', 'ordered', 'delivered'],
-        default: 'available'
+        default: 'available' //all products are available by default
     },
 
     address: {

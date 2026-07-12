@@ -7,6 +7,12 @@ const mongoose = require ('mongoose');
 const app = express();
 const PORT = 3000;
 
+app.use(express.json()); //teach express how to read json
+
+/*import and use user routes*/
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
+
 /*connect to mongodb*/
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
