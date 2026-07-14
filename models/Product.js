@@ -18,7 +18,7 @@ const productSchema = new mongoose.Schema({
     categoryId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-        required = true
+        required: true
     },
 
     status: {
@@ -32,15 +32,20 @@ const productSchema = new mongoose.Schema({
         required: true
     },
 
+    city: {
+        type: String,
+        required: true //collection city - used by the search (section 23) and aggregations (section 24)
+    },
+
     location: {
         lat: {type: Number, required: true},
         long: {type: Number, required: true}
     },
 
     donatedBy: {
-        type: mongoose.Types.Schema.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: True
+        required: true
     }
 
 }, {timestamps: true});
