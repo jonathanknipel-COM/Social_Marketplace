@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - פרופיל וסטטיסטיקות</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- טעינת ספריית D3.js לפיתוח הגרפים (חובה לפי סעיף 33.i) -->
+    <script src="https://d3js.org/v7.min.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>ShareIt - דאשבורד אישי</h1>
+        <p>מעקב אחר פריטים שתרמת, קיבלת וסטטיסטיקות המערכת</p>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">קטלוג מוצרים</a></li>
+            <li><a href="profile.html" class="active">הפרופיל שלי (דאשבורד)</a></li>
+        </ul>
+    </nav>
+
+    <main class="container profile-layout">
+        
+        <!-- אזור פרטי המשתמש ורכיב הקנבס האנימטיבי -->
+        <section class="user-profile-info">
+            <h2>הפרופיל שלי</h2>
+            <div class="user-card">
+                <p><strong>שם מלא:</strong> <span id="user-name">ישראל ישראלי</span></p>
+                <p><strong>עיר:</strong> <span id="user-city">תל אביב</span></p>
+                <p><strong>טלפון:</strong> <span id="user-phone">050-1234567</span></p>
+            </div>
+
+            <!-- רכיב HTML5: Canvas להצגת אנימציה/גרפיקה חגיגית של "מדליית תורם" -->
+            <div class="canvas-box">
+                <h3>מדליית תרומה קהילתית (HTML5 Canvas)</h3>
+                <canvas id="profile-canvas" width="200" height="200"></canvas>
+                <p class="canvas-caption">המדליה מיוצרת דינמית על גבי ה-Canvas כהוקרה על מעורבות חברתית.</p>
+            </div>
+        </section>
+
+        <!-- אזור הסטטיסטיקות הדינמיות המבוססות על נתוני אמת מה-DB (D3.js) -->
+        <section class="dashboard-charts">
+            <h2>ניתוח נתונים וסטטיסטיקות קהילה</h2>
+            
+            <div class="charts-grid">
+                <!-- גרף 1: גרף עוגה (התפלגות פריטים לפי קטגוריה) -->
+                <div class="chart-box">
+                    <h3>התפלגות פריטים זמינים בחנות (גרף עוגה)</h3>
+                    <div id="chart-categories" class="d3-chart"></div>
+                </div>
+
+                <!-- גרף 2: גרף עמודות (כמות פריטים שנמסרו לאורך חודשי השנה) -->
+                <div class="chart-box">
+                    <h3>קצב מסירות מוצרים חודשי (גרף עמודות)</h3>
+                    <div id="chart-monthly" class="d3-chart"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - נבנה במסגרת קורס פיתוח אפליקציות רשת</p>
+    </footer>
+
+    <!-- קובץ ה-JS הייעודי שמפעיל את הקנבס והגרפים של D3 -->
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - דף הבית</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- תגיות סמנטיות: header, nav -->
+    <header class="main-header">
+        <h1>ShareIt</h1>
+        <p>פלטפורמת מסחר חברתית המבוססת על עקרון הכלכלה השיתופית</p>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html" class="active">קטלוג מוצרים</a></li>
+            <li><a href="profile.html">הפרופיל שלי (דאשבורד)</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        
+        <!-- תגית סמנטית: aside עבור סרגל הסינון הצדדי -->
+        <aside class="filter-sidebar">
+            <h3>חיפוש מרובה פרמטרים</h3>
+            <!-- טופס סינון אסינכרוני (Ajax/Fetch) -->
+            <form id="advanced-filter-form">
+                <div class="form-group">
+                    <label for="filter-category">קטגוריה:</label>
+                    <select id="filter-category" name="categoryId">
+                        <option value="">כל הקטגוריות</option>
+                        <option value="furniture">רהיטים</option>
+                        <option value="appliances">מוצרי חשמל</option>
+                        <option value="clothing">ביגוד</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="filter-radius">טווח מרחק מקסימלי (ק"מ):</label>
+                    <input type="number" id="filter-radius" name="radius" placeholder="לדוגמה: 15" min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="filter-status">סטטוס פריט:</label>
+                    <select id="filter-status" name="status">
+                        <option value="available">זמין בלבד</option>
+                        <option value="all">הכל (כולל הוזמן/נמסר)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">חפש מוצרים</button>
+            </form>
+        </aside>
+
+        <!-- תגית סמנטית: main עבור התוכן המרכזי -->
+        <main class="main-content">
+            
+            <!-- רכיב HTML5: Video בעמוד הבית עם סרטון מסביר (דרישה מההוראות) -->
+            <section class="video-section">
+                <h3>איך זה עובד? צפו בסרטון קצר</h3>
+                <video id="promo-video" controls poster="assets/video-placeholder.jpg">
+                    <source src="assets/shareit-promo.mp4" type="video/mp4">
+                    הדפדפן שלך אינו תומך בניגון וידאו.
+                </video>
+            </section>
+
+            <!-- תגית סמנטית: section עבור קטלוג הפריטים -->
+            <section class="catalog-section">
+                <h2>מוצרים זמינים בקהילה ומחכים לך</h2>
+                <!-- הגריד יחולק לעמודות מרובות (Multiple-columns) ב-CSS -->
+                <div id="products-grid" class="products-grid">
+                    <!-- כרטיסיות המוצרים יוזרקו כאן דינמית באמצעות JS/Fetch מהשרת -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- תגית סמנטית: footer -->
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - נבנה במסגרת קורס פיתוח אפליקציות</p>
+    </footer>
+
+    <!-- קובץ ה-JS המרכזי לניהול הקטלוג והסינון -->
+    <script src="js/main.js"></script>
+</body>
+</html>

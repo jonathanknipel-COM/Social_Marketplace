@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - פרטי מוצר</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- טעינת סקריפט המפות של גוגל (יש להחליף את YOUR_API_KEY במפתח אמיתי אם רלוונטי) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>ShareIt</h1>
+        <p>פרטי הפריט ומיקום לאיסוף</p>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">קטלוג מוצרים</a></li>
+            <li><a href="profile.html">הפרופיל שלי (דאשבורד)</a></li>
+        </ul>
+    </nav>
+
+    <main class="container product-detail-layout">
+        <section class="product-info-card">
+            <!-- פרטי המוצר שייטענו בצורה אסינכרונית לפי ה-ID ב-URL -->
+            <div id="product-details">
+                <h2 id="product-title">טוען כותרת...</h2>
+                <img id="product-image" src="" alt="תמונת מוצר" class="detail-img">
+                <p id="product-desc">טוען תיאור מוצר...</p>
+                <div class="product-meta">
+                    <p><strong>קטגוריה:</strong> <span id="product-cat">-</span></p>
+                    <p><strong>סטטוס:</strong> <span id="product-status" class="badge">-</span></p>
+                </div>
+                <button id="action-btn" class="btn">בקש לקבל את המוצר (רכישה ב-0 ₪)</button>
+            </div>
+        </section>
+
+        <!-- אזור הפיצ'רים המתקדמים ושירותי הרשת (Web Services) -->
+        <aside class="product-services">
+            
+            <!-- פיצ'ר א': הצגת מיקום איסוף על גבי מפה דינמית (דרישה מההוראות) -->
+            <div class="service-box">
+                <h3><i class="icon-map"></i> מיקום המוצר על המפה</h3>
+                <div id="map-container" style="width: 100%; height: 250px; border-radius: 8px;">
+                    <!-- המפה הדינמית תוזרק לכאן באמצעות Google Maps API -->
+                </div>
+            </div>
+
+            <!-- פיצ'ר ב': צריכת שירות רשת חיצוני (OpenWeatherMap API) לחיזוי מזג אוויר -->
+            <div class="service-box weather-box">
+                <h3><i class="icon-cloud"></i> מזג האוויר במיקום האיסוף</h3>
+                <div id="weather-container">
+                    <p>טוען נתוני מזג אוויר בזמן אמת מהשרת...</p>
+                    <!-- יוצג כאן: טמפרטורה, תיאור (גשום/שמש) והמלצת הובלה -->
+                </div>
+            </div>
+
+        </aside>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - נבנה במסגרת קורס פיתוח אפליקציות רשת</p>
+    </footer>
+
+    <!-- קובץ ה-JS לטיפול בעמוד המוצר, המפה והמזג אוויר -->
+    <script src="js/main.js"></script>
+    <script>
+        // קוד אתחול ספציפי לעמוד המוצר (שולף את ה-ID מה-URL ומריץ את הפונקציות)
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            if (productId) {
+                // פונקציות אסינכרוניות שימומשו ב-main.js כדי למשוך את הנתונים מהשרת
+                loadProductDetail(productId); 
+            }
+        });
+    </script>
+</body>
+</html>
