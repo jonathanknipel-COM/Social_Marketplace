@@ -13,6 +13,16 @@ app.use(express.json()); //teach express how to read json
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
 
+/*import and use auth (login), product and category routes*/
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
+const productRoutes = require('./routes/productRoutes');
+app.use('/api/products', productRoutes);
+
+const categoryRoutes = require('./routes/categoryRoutes');
+app.use('/api/categories', categoryRoutes);
+
 /*connect to mongodb*/
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
