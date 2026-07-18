@@ -12,21 +12,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// פונקציית Fetch אסינכרונית לטעינת מוצרים מה-API של השרת שלכם
+// Asynchronous Fetch function to load products from your server API
 async function loadProducts(queryString = '') {
     const productsGrid = document.getElementById("products-grid");
     if (!productsGrid) return;
 
     try {
-        productsGrid.innerHTML = "<p>טוען מוצרים...</p>";
+        productsGrid.innerHTML = "<p>Loading products...</p>";
         
-        // פנייה אסינכרונית לשרת ה-Express שלכם
+        // Asynchronous call to your Express server
         const response = await fetch(`/api/products?${queryString}`);
         const products = await response.json();
 
         productsGrid.innerHTML = "";
         if (products.length === 0) {
-            productsGrid.innerHTML = "<p>לא נמצאו מוצרים העונים על דרישות הסינון.</p>";
+            productsGrid.innerHTML = "<p>No products found matching the filter criteria.</p>";
             return;
         }
 
@@ -37,29 +37,29 @@ async function loadProducts(queryString = '') {
                 <img src="${product.imagePath || 'assets/default.jpg'}" alt="${product.title}">
                 <h3>${product.title}</h3>
                 <p>${product.description}</p>
-                <span class="badge ${product.status}">${product.status === 'available' ? 'זמין למסירה' : 'הוזמן'}</span>
-                <button class="btn" onclick="viewProduct('${product._id}')">לפרטים מלאים</button>
+                <span class="badge ${product.status}">${product.status === 'available' ? 'Available for delivery' : 'Requested'}</span>
+                <button class="btn" onclick="viewProduct('${product._id}')">Full Details</button>
             `;
             productsGrid.appendChild(card);
         });
     } catch (error) {
-        console.error("שגיאה בטעינת המוצרים:", error);
-        productsGrid.innerHTML = "<p>שגיאה בתקשורת עם השרת בהבאת הנתונים.</p>";
+        console.error("Error loading products:", error);
+        productsGrid.innerHTML = "<p>Error communicating with the server while fetching data.</p>";
     }
 }
 
-// מעבר דינמי לעמוד המוצר המורחב
+// Dynamic redirect to the extended product page
 function viewProduct(id) {
     window.location.href = `product.html?id=${id}`;
 }
 
-// אינטגרציה בסיסית למפה עבור דף המוצר (יופעל ב-product.html)
+// Basic map integration for the product page (will be executed in product.html)
 function initProductMap(lat, lng) {
     const mapContainer = document.getElementById('map-container');
     if (!mapContainer) return;
 
-    // דוגמה להטמעת מפה דינמית (כאן באמצעות Google Maps API)
-    // הערה: יש לוודא שהזרקתם את ה-Script של גוגל עם ה-API-key שלכם
+    // Example of dynamic map implementation (here using Google Maps API)
+    // Note: Make sure you have injected the Google script with your API-key
     const position = { lat: parseFloat(lat), lng: parseFloat(lng) };
     const map = new google.maps.Map(mapContainer, {
         zoom: 15,
@@ -68,6 +68,6 @@ function initProductMap(lat, lng) {
     const marker = new google.maps.Marker({
         position: position,
         map: map,
-        title: "מיקום איסוף המוצר"
+        title: "Product Pickup Location"
     });
 }

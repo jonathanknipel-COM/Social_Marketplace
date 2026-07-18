@@ -1,90 +1,90 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShareIt - דף הבית</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>ShareIt - Home</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- תגיות סמנטיות: header, nav -->
+    <!-- Semantic tags: header, nav -->
     <header class="main-header">
         <h1>ShareIt</h1>
-        <p>פלטפורמת מסחר חברתית המבוססת על עקרון הכלכלה השיתופית</p>
+        <p>A social marketplace platform based on the principle of the collaborative economy</p>
     </header>
 
     <nav class="main-nav">
         <ul>
-            <li><a href="index.html" class="active">קטלוג מוצרים</a></li>
-            <li><a href="profile.html">הפרופיל שלי (דאשבורד)</a></li>
+            <li><a href="index.html" class="active">Product Catalog</a></li>
+            <li><a href="login.html">My Profile (Dashboard)</a></li>
         </ul>
     </nav>
 
     <div class="container">
         
-        <!-- תגית סמנטית: aside עבור סרגל הסינון הצדדי -->
+        <!-- Semantic tag: aside for the sidebar filter -->
         <aside class="filter-sidebar">
-            <h3>חיפוש מרובה פרמטרים</h3>
-            <!-- טופס סינון אסינכרוני (Ajax/Fetch) -->
+            <h3>Advanced Search</h3>
+            <!-- Asynchronous filter form (Ajax/Fetch) -->
             <form id="advanced-filter-form">
                 <div class="form-group">
-                    <label for="filter-category">קטגוריה:</label>
+                    <label for="filter-category">Category:</label>
                     <select id="filter-category" name="categoryId">
-                        <option value="">כל הקטגוריות</option>
-                        <option value="furniture">רהיטים</option>
-                        <option value="appliances">מוצרי חשמל</option>
-                        <option value="clothing">ביגוד</option>
+                        <option value="">All Categories</option>
+                        <option value="furniture">Furniture</option>
+                        <option value="appliances">Appliances</option>
+                        <option value="clothing">Clothing</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label for="filter-radius">טווח מרחק מקסימלי (ק"מ):</label>
-                    <input type="number" id="filter-radius" name="radius" placeholder="לדוגמה: 15" min="1">
+                    <label for="filter-radius">Maximum Distance (km):</label>
+                    <input type="number" id="filter-radius" name="radius" placeholder="e.g., 15" min="1">
                 </div>
 
                 <div class="form-group">
-                    <label for="filter-status">סטטוס פריט:</label>
+                    <label for="filter-status">Item Status:</label>
                     <select id="filter-status" name="status">
-                        <option value="available">זמין בלבד</option>
-                        <option value="all">הכל (כולל הוזמן/נמסר)</option>
+                        <option value="available">Available Only</option>
+                        <option value="all">All (Including Requested/Delivered)</option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn">חפש מוצרים</button>
+                <button type="submit" class="btn">Search Products</button>
             </form>
         </aside>
 
-        <!-- תגית סמנטית: main עבור התוכן המרכזי -->
+        <!-- Semantic tag: main for the central content -->
         <main class="main-content">
             
-            <!-- רכיב HTML5: Video בעמוד הבית עם סרטון מסביר (דרישה מההוראות) -->
+            <!-- HTML5 Component: Video on the home page with an explanatory video (Instructions requirement) -->
             <section class="video-section">
-                <h3>איך זה עובד? צפו בסרטון קצר</h3>
+                <h3>How does it work? Watch a short video</h3>
                 <video id="promo-video" controls poster="assets/video-placeholder.jpg">
                     <source src="assets/shareit-promo.mp4" type="video/mp4">
-                    הדפדפן שלך אינו תומך בניגון וידאו.
+                    Your browser does not support the video tag.
                 </video>
             </section>
 
-            <!-- תגית סמנטית: section עבור קטלוג הפריטים -->
+            <!-- Semantic tag: section for the item catalog -->
             <section class="catalog-section">
-                <h2>מוצרים זמינים בקהילה ומחכים לך</h2>
-                <!-- הגריד יחולק לעמודות מרובות (Multiple-columns) ב-CSS -->
+                <h2>Products available in the community waiting for you</h2>
+                <!-- The grid will be divided into multiple columns using CSS -->
                 <div id="products-grid" class="products-grid">
-                    <!-- כרטיסיות המוצרים יוזרקו כאן דינמית באמצעות JS/Fetch מהשרת -->
+                    <!-- Product cards will be dynamically injected here using JS/Fetch from the server -->
                 </div>
             </section>
 
         </main>
     </div>
 
-    <!-- תגית סמנטית: footer -->
+    <!-- Semantic tag: footer -->
     <footer class="main-footer">
-        <p>&copy; 2026 ShareIt - נבנה במסגרת קורס פיתוח אפליקציות</p>
+        <p>&copy; 2026 ShareIt - Built as part of the Web Applications course</p>
     </footer>
 
-    <!-- קובץ ה-JS המרכזי לניהול הקטלוג והסינון -->
+    <!-- Main JS file for catalog management and filtering -->
     <script src="js/main.js"></script>
 </body>
 </html>

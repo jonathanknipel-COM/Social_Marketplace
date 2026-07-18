@@ -1,4 +1,4 @@
-/* פונט מותאם אישית לפי דרישה iv */
+/* Custom font per Requirement iv */
 @font-face {
     font-family: 'CustomSecular';
     src: url('../assets/SecularOne-Regular.ttf') format('truetype');
@@ -18,7 +18,7 @@ body {
     color: var(--dark-color);
 }
 
-/* אפקט צל לטקסט לפי דרישה i */
+/* Text shadow effect per Requirement i */
 .main-header h1 {
     font-size: 3rem;
     text-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
@@ -38,7 +38,7 @@ body {
     flex: 1;
     background: white;
     padding: 20px;
-    border-radius: 12px; /* פינות מעוגלות לפי דרישה v */
+    border-radius: 12px; /* Rounded corners per Requirement v */
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
@@ -46,7 +46,7 @@ body {
     flex: 3;
 }
 
-/* חלוקת עמודות מרובות (Multiple Columns) לפי דרישה iii */
+/* Multiple Columns layout division per Requirement iii */
 .products-grid {
     column-count: 3;
     column-gap: 20px;
@@ -59,10 +59,10 @@ body {
     border-radius: 10px;
     padding: 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* אפקט מעבר חלק לפי דרישה ii */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effect per Requirement ii */
 }
 
-/* אפקט ריחוף על כרטיסיית מוצר */
+/* Hover effect on product card */
 .product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0,0,0,0.15);
