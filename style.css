@@ -1,0 +1,88 @@
+/* Custom font per Requirement iv */
+@font-face {
+    font-family: 'CustomSecular';
+    src: url('../assets/SecularOne-Regular.ttf') format('truetype');
+}
+
+:root {
+    --primary-color: #2ecc71;
+    --secondary-color: #3498db;
+    --dark-color: #2c3e50;
+    --light-color: #f4f6f7;
+}
+
+body {
+    font-family: 'CustomSecular', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+}
+
+/* Text shadow effect per Requirement i */
+.main-header h1 {
+    font-size: 3rem;
+    text-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+    padding: 0 15px;
+}
+
+.filter-sidebar {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 12px; /* Rounded corners per Requirement v */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.main-content {
+    flex: 3;
+}
+
+/* Multiple Columns layout division per Requirement iii */
+.products-grid {
+    column-count: 3;
+    column-gap: 20px;
+}
+
+.product-card {
+    background: white;
+    margin-bottom: 20px;
+    break-inside: avoid;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effect per Requirement ii */
+}
+
+/* Hover effect on product card */
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn:hover {
+    background-color: #27ae60;
+}

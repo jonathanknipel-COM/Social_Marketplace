@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - Product Details</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Loading Google Maps script (replace YOUR_API_KEY with a real key if applicable) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>ShareIt</h1>
+        <p>Item details and pickup location</p>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">Product Catalog</a></li>
+            <li><a href="login.html">My Profile (Dashboard)</a></li>
+        </ul>
+    </nav>
+
+    <main class="container product-detail-layout">
+        <section class="product-info-card">
+            <!-- Product details that will be loaded asynchronously based on the URL ID -->
+            <div id="product-details">
+                <h2 id="product-title">Loading title...</h2>
+                <img id="product-image" src="" alt="Product image" class="detail-img">
+                <p id="product-desc">Loading product description...</p>
+                <div class="product-meta">
+                    <p><strong>Category:</strong> <span id="product-cat">-</span></p>
+                    <p><strong>Status:</strong> <span id="product-status" class="badge">-</span></p>
+                </div>
+                <button id="action-btn" class="btn">Request to receive product (Purchase for 0 ₪)</button>
+            </div>
+        </section>
+
+        <!-- Advanced features and Web Services area -->
+        <aside class="product-services">
+            
+            <!-- Feature A: Displaying pickup location on a dynamic map (Instructions requirement) -->
+            <div class="service-box">
+                <h3><i class="icon-map"></i> Product Location on Map</h3>
+                <div id="map-container" style="width: 100%; height: 250px; border-radius: 8px;">
+                    <!-- The dynamic map will be injected here using Google Maps API -->
+                </div>
+            </div>
+
+            <!-- Feature B: Consuming external web service (OpenWeatherMap API) for weather forecasting -->
+            <div class="service-box weather-box">
+                <h3><i class="icon-cloud"></i> Weather at Pickup Location</h3>
+                <div id="weather-container">
+                    <p>Loading real-time weather data from server...</p>
+                    <!-- Will be displayed here: temperature, description (rainy/sunny), and transport recommendation -->
+                </div>
+            </div>
+
+        </aside>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
+    </footer>
+
+    <!-- JS file for handling product page, map, and weather -->
+    <script src="js/main.js"></script>
+    <script>
+        // Specific initialization code for the product page (extracts the ID from the URL and runs the functions)
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            if (productId) {
+                // Asynchronous functions to be implemented in main.js to fetch data from the server
+                loadProductDetail(productId); 
+            }
+        });
+    </script>
+</body>
+</html>

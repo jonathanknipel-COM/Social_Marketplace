@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - Profile & Statistics</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Loading D3.js library for charts development (Mandatory per section 33.i) -->
+    <script src="https://d3js.org/v7.min.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>ShareIt - Personal Dashboard</h1>
+        <p>Track items you donated, received, and system statistics</p>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">Product Catalog</a></li>
+            <li><a href="profile.html" class="active">My Profile (Dashboard)</a></li>
+        </ul>
+    </nav>
+
+    <main class="container profile-layout">
+        
+        <!-- User profile info and animated Canvas component area -->
+        <section class="user-profile-info">
+            <h2>My Profile</h2>
+            <div class="user-card">
+                <p><strong>Full Name:</strong> <span id="user-name">John Doe</span></p>
+                <p><strong>City:</strong> <span id="user-city">Tel Aviv</span></p>
+                <p><strong>Phone:</strong> <span id="user-phone">050-1234567</span></p>
+            </div>
+
+            <!-- HTML5 Component: Canvas to display a festive animation/graphics of a "Contribution Medal" -->
+            <div class="canvas-box">
+                <h3>Community Contribution Medal (HTML5 Canvas)</h3>
+                <canvas id="profile-canvas" width="200" height="200"></canvas>
+                <p class="canvas-caption">The medal is dynamically generated on the Canvas as appreciation for social involvement.</p>
+            </div>
+        </section>
+
+        <!-- Dynamic statistics area based on real-time data from DB (D3.js) -->
+        <section class="dashboard-charts">
+            <h2>Data Analysis & Community Statistics</h2>
+            
+            <div class="charts-grid">
+                <!-- Chart 1: Pie Chart (Item distribution by category) -->
+                <div class="chart-box">
+                    <h3>Distribution of Available Shop Items (Pie Chart)</h3>
+                    <div id="chart-categories" class="d3-chart"></div>
+                </div>
+
+                <!-- Chart 2: Bar Chart (Quantity of items delivered throughout the months of the year) -->
+                <div class="chart-box">
+                    <h3>Monthly Product Delivery Rate (Bar Chart)</h3>
+                    <div id="chart-monthly" class="d3-chart"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
+    </footer>
+
+    <!-- Dedicated JS file that handles the Canvas and D3 charts -->
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
