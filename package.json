@@ -1,0 +1,31 @@
+{
+  "name": "social_marketplace",
+  "version": "1.0.0",
+  "description": "A Final Project of a Social Marketplace shop - ShareIt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonathanknipel-COM/Social_Marketplace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jonathanknipel-COM/Social_Marketplace/issues"
+  },
+  "homepage": "https://github.com/jonathanknipel-COM/Social_Marketplace#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
