@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - Profile & Statistics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Loading D3.js library for charts development (Mandatory per section 33.i) -->
+    <script src="https://d3js.org/v7.min.js"></script>
+    <!-- Relative absolute link to the unified external CSS file -->
+    <link rel="stylesheet" href="css/auth-style.css">
+</head>
+<body>
+
+    <nav class="main-nav">
+        <a href="index.html" class="nav-logo">ShareIt</a>
+        <ul>
+            <li><a href="index.html">Catalog</a></li>
+            <li><a href="profile.html" class="active">My Profile</a></li>
+            <li><a href="admin.html">Admin Console</a></li>
+            <li><a href="logout.html" id="logout-link" style="color: #e74c3c;">Log Out</a></li>
+        </ul>
+    </nav>
+
+    <div class="dashboard-header">
+        <h1>Personal Dashboard</h1>
+        <p>Track items you donated, received, and system statistics</p>
+    </div>
+
+    <main class="container">
+        
+        <!-- User profile details and animated canvas section -->
+        <section class="user-profile-info">
+            <div class="profile-section-card">
+                <h2>My Profile</h2>
+                <div class="user-card">
+                    <p><strong>Full Name:</strong> <span id="user-name">Loading...</span></p>
+                    <p><strong>City:</strong> <span id="user-city">Loading...</span></p>
+                    <p><strong>Phone:</strong> <span id="user-phone">Loading...</span></p>
+                </div>
+            </div>
+
+            <!-- HTML5 Component: Canvas to display a festive animation/graphics of a "Contribution Medal" -->
+            <div class="profile-section-card canvas-box">
+                <h3>Contribution Medal</h3>
+                <canvas id="profile-canvas" width="200" height="200"></canvas>
+                <p class="canvas-caption">The medal is dynamically generated on the Canvas as appreciation for social involvement.</p>
+            </div>
+        </section>
+
+        <!-- Dynamic statistics area based on real-time data from DB (D3.js) -->
+        <section class="dashboard-charts">
+            <div class="charts-main-card">
+                <h2>Data Analysis & Community Statistics</h2>
+                
+                <div class="charts-grid">
+                    <!-- Chart 1: Pie Chart (Item distribution by category) -->
+                    <div class="chart-box">
+                        <h3>Available Shop Items (Pie Chart)</h3>
+                        <div id="chart-categories" class="d3-chart"></div>
+                    </div>
+
+                    <!-- Chart 2: Bar Chart (Quantity of items delivered throughout the months of the year) -->
+                    <div class="chart-box">
+                        <h3>Monthly Product Delivery Rate (Bar Chart)</h3>
+                        <div id="chart-monthly" class="d3-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
+    </footer>
+
+    <!-- Authenticated user loading logic and logout mechanism -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. Fetch the authenticated user object from localStorage
+            const userDataString = localStorage.getItem('currentUser');
+            
+            if (userDataString) {
+                const user = JSON.parse(userDataString);
+                
+                // Inject real-time database values into the DOM
+                document.getElementById('user-name').textContent = user.name || "Not Provided";
+                document.getElementById('user-city').textContent = user.city || "Not Provided";
+                document.getElementById('user-phone').textContent = user.phone || "Not Provided";
+            } else {
+                // If no active session exists, restrict access and redirect to the login panel
+                window.location.href = "login.html";
+            }
+
+            // 2. Initialize the logout session listener
+            const logoutLink = document.getElementById('logout-link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Clear user identity records from browser storage
+                    localStorage.removeItem('currentUser');
+                    
+                    // Redirect execution flow to the formal logout landing file
+                    window.location.href = "logout.html";
+                });
+            }
+        });
+    </script>
+
+    <!-- Dedicated JS file that drives the canvas frame and handles D3 rendering -->
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

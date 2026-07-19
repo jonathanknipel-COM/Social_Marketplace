@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - Logged Out</title>
+    <!-- Using the dedicated website font for the project -->
+    <link rel="stylesheet" href="css/auth-style.css">
+    <style>
+        /* Specific center alignments for the logout card component */
+        .logout-box {
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+        }
+        
+        .success-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .countdown-notice {
+            background-color: var(--light-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Unified header layout used across the site -->
+    <header class="main-header">
+        <h1>ShareIt</h1>
+        <p>Built as part of the Web Applications Development course</p>
+    </header>
+
+    <!-- Matching navigation bar component -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">Product Catalog</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main container keeping the existing layout flow structure -->
+    <main class="container" style="justify-content: center; align-items: center; min-height: 50vh;">
+        
+        <!-- Utilizing the clean white filter-sidebar card with shadow style to match the login box layout -->
+        <section class="filter-sidebar logout-box">
+            <div class="success-icon">✔</div>
+            <h2>Logged Out Successfully</h2>
+            <p style="color: #64748b; margin-bottom: 20px;">You have been safely disconnected from your account session.</p>
+            
+            <div class="countdown-notice">
+                Redirecting you to the catalog in <span id="countdown" style="font-weight: 700; color: var(--dark-color);">3</span> seconds...
+            </div>
+            
+            <a href="index.html" class="btn" style="text-decoration: none; margin-top: 25px; box-sizing: border-box;">
+                Return Instantly
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Unified footer section -->
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - Secure Disconnection Panel</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Clear local user authentication token state from browser storage
+            localStorage.removeItem('currentUser');
+
+            // Countdown timer mechanism for automated redirect to the landing page index
+            let seconds = 3;
+            const countdownEl = document.getElementById('countdown');
+            
+            const interval = setInterval(() => {
+                seconds--;
+                if (countdownEl) countdownEl.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    window.location.href = "index.html";
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
