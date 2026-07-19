@@ -4,7 +4,7 @@ function drawContributionMedal() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
 
-    // Cleaning
+    // Cleaning the canvas frame area before drawing
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Drawing the medal circle
@@ -30,7 +30,7 @@ function drawContributionMedal() {
     ctx.lineTo(130, 160);
     ctx.lineTo(105, 150);
     ctx.lineTo(100, 110);
-    ctx.fillStyle = "#e74c3c";
+    ctx.fillStyle = "#e74c3c"; // Red
     ctx.fill();
 
     // Text inside the medal
@@ -110,7 +110,25 @@ async function renderD3Charts() {
     }
 }
 
-// Execution on page load
+// User session verification and data rendering on DOM content load
+document.addEventListener("DOMContentLoaded", () => {
+    // Retrieve the saved user data string from localStorage
+    const userDataString = localStorage.getItem('currentUser');
+    
+    if (userDataString) {
+        const user = JSON.parse(userDataString);
+        
+        // Update the DOM view containers with real application data records
+        document.getElementById('user-name').textContent = user.name || "Unknown";
+        document.getElementById('user-city').textContent = user.city || "Unknown";
+        document.getElementById('user-phone').textContent = user.phone || "Unknown";
+    } else {
+        // If no user is logged in, restrict dashboard view access and redirect to the login interface
+        window.location.href = "login.html";
+    }
+});
+
+// Execution of drawing operations and chart rendering handlers on page load
 window.onload = () => {
     drawContributionMedal();
     renderD3Charts();
