@@ -29,7 +29,7 @@
             <form id="register-form">
                 <div class="form-group">
                     <label for="reg-name">Full Name:</label>
-                    <input type="text" id="reg-name" name="name" placeholder="John Doe" required>
+                    <input type="text" id="reg-name" name="fullName" placeholder="John Doe" required>
                 </div>
 
                 <div class="form-group">
@@ -67,6 +67,7 @@
         <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
     </footer>
 
+    <script src="js/constants/url.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const regForm = document.getElementById("register-form");
@@ -83,7 +84,7 @@
                         regMessage.style.color = "var(--dark-color)";
                         regMessage.textContent = "Creating account...";
 
-                        const response = await fetch('/api/users/register', {
+                        const response = await fetch(API_BASE_URL + '/api/users/register', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(data)

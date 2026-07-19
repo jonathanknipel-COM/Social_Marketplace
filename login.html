@@ -57,6 +57,7 @@
         <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
     </footer>
 
+    <script src="js/constants/url.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const loginForm = document.getElementById("login-form");
@@ -73,7 +74,7 @@
                         loginMessage.style.color = "var(--dark-color)";
                         loginMessage.textContent = "Authenticating...";
 
-                        const response = await fetch('/api/users/login', {
+                        const response = await fetch(API_BASE_URL + '/api/auth/login', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(data)
