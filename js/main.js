@@ -21,16 +21,16 @@ async function loadProducts(queryString = '') {
         productsGrid.innerHTML = "<p>Loading products...</p>";
         
         // Asynchronous call to your Express server
-        const response = await fetch(`/api/products?${queryString}`);
-        const products = await response.json();
+        const response = await fetch(`${API_BASE_URL}/api/products?${queryString}`);
+        const data = await response.json();
 
         productsGrid.innerHTML = "";
-        if (products.length === 0) {
+        if (data.products.length === 0) {
             productsGrid.innerHTML = "<p>No products found matching the filter criteria.</p>";
             return;
         }
-
-        products.forEach(product => {
+        console.log(data); // Log the products to the console for debugging
+        data.products.forEach(product => {
             const card = document.createElement("div");
             card.className = "product-card";
             card.innerHTML = `

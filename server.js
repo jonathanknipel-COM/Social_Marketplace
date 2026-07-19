@@ -3,10 +3,16 @@ require('dotenv').config();
 const express = require ('express');
 const mongoose = require ('mongoose');
 
+const cors = require ('cors');
+
+
 /*initialize the app*/
 const app = express();
 const PORT = 3000;
 
+app.use(cors({
+    origin: 'http://localhost:5500', //allow requests from this origin
+})); //allow cross-origin requests
 app.use(express.json()); //teach express how to read json
 
 /*import and use user routes*/
