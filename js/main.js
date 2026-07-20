@@ -71,3 +71,18 @@ function initProductMap(lat, lng) {
         title: "Product Pickup Location"
     });
 }
+
+
+/**
+ * Fetches product data based on ID
+ */
+async function loadProductDetail(id) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/products/${id}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching product detail:", error);
+        throw error;
+    }
+}

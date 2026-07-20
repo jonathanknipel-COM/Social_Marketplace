@@ -27,7 +27,13 @@
         <!-- Product details that will be loaded asynchronously based on the URL ID -->
         <div id="product-details">
           <h2 id="product-title">Loading title...</h2>
-          <img id="product-image" src="" alt="Product image" class="detail-img" />
+          <img
+            id="product-image"
+            src=""
+            alt="Product image"
+            class="detail-img"
+            style="width: 100%; height: auto; border-radius: 8px"
+          />
           <p id="product-desc">Loading product description...</p>
           <div class="product-meta">
             <p><strong>Category:</strong> <span id="product-cat">-</span></p>
@@ -101,9 +107,7 @@
           <label for="date-picker" style="color: black">Select Date:</label>
           <input type="date" id="date-picker" name="date-picker" placeholder="click to select a date" />
           <br /><br />
-          <div id="weather-info" style="
-            display: none;
-          ">
+          <div id="weather-info" style="display: none">
             <h4>מזג אוויר לתאריך: <span id="w-date">-</span></h4>
             <p>🌡️ טמפרטורה: <span id="w-temperature">-</span></p>
             <p>☁️ מצב השמיים: <span id="w-description">-</span></p>
@@ -116,15 +120,32 @@
     </div>
 
     <!-- JS file for handling product page, map, and weather -->
+    <script src="js/constants/url.js"></script>
     <script src="js/main.js"></script>
     <script>
       // Specific initialization code for the product page (extracts the ID from the URL and runs the functions)
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", async () => {
         const urlParams = new URLSearchParams(window.location.search)
         const productId = urlParams.get("id")
         if (productId) {
           // Asynchronous functions to be implemented in main.js to fetch data from the server
-          loadProductDetail(productId)
+          const data = await loadProductDetail(productId)
+          const product = data.product
+
+          //   Save product location
+          window.product_location = {
+            lat: product.location.lat,
+            long: product.location.long,
+          }
+
+          // Embed data in info section
+          document.getElementById("product-title").textContent = product.name
+          document.getElementById("product-image").src = product.mediaPath
+          document.getElementById("product-desc").textContent = product.description
+          document.getElementById("product-cat").textContent = product.categoryName
+          document.getElementById("product-status").textContent = product.status
+          document.querySelector("#map-container iframe").src =
+            `https://www.google.com/maps/embed/v1/place?key=AIzaSyDZgHpEuLI41RVeUI2eMftMTyxS27XxSCA&q=${product.location.lat},${product.location.long}`
         }
       })
 
@@ -154,16 +175,16 @@
         const units = "metric" // Use metric units for temperature
 
         // const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`
-        const url = `https://api.openweathermap.org/data/4.0/onecall/current?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=${lang}&units=${units}`;
+        const url = `https://api.openweathermap.org/data/4.0/onecall/current?lat=${product_location.lat}&lon=${product_location.long}&appid=${apiKey}&lang=${lang}&units=${units}`
         const res = await fetch(url, { method: "GET" }) // send request to weather API
         const data = await res.json() // parse json response from API
         console.log(data)
 
         // Display information below the date picker
         weatherInfo.style.display = "block"
-        document.getElementById("w-date").textContent = event.target.value;
-        document.getElementById("w-temperature").textContent = data.data[0].temp + " °C";
-        document.getElementById("w-description").textContent = data.data[0].weather[0].description;
+        document.getElementById("w-date").textContent = event.target.value
+        document.getElementById("w-temperature").textContent = data.data[0].temp + " °C"
+        document.getElementById("w-description").textContent = data.data[0].weather[0].description
       })
 
       // Attach submit event to purchase form
