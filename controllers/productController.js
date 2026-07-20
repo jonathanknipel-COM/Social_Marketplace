@@ -2,6 +2,15 @@ const Product = require('../models/Product');
 const Category = require('../models/Category');
 const User = require('../models/User');
 const {getLoggedInUser} = require('../utils/auth');
+const { TwitterApi } = require('twitter-api-v2');
+
+// Initialize Twitter Client
+const twitterClient = new TwitterApi({
+    appKey: process.env.TWITTER_APP_KEY,
+    appSecret: process.env.TWITTER_APP_SECRET,
+    accessToken: process.env.TWITTER_ACCESS_TOKEN,
+    accessSecret: process.env.TWITTER_ACCESS_SECRET,
+});
 
 /*
  * helper: take a product and attach the category name + donor name using basic
@@ -43,6 +52,14 @@ const createProduct = async (req, res) => {
         });
 
         await newProduct.save();
+        // --- NEW: TWITTER API INTEGRATION ---
+        try {
+            console.log(`[TWITTER] Attempting to tweet about new product: ${title}`);
+            // await twitterClient.v2.tweet(`Check out our new item up for grabs: ${title} in ${city}!`);
+        } catch (twitterError) {
+            console.error("Twitter API Error (Non-Fatal):", twitterError.message);
+        }
+        // ------------------------------------
         res.status(201).json({message: "Product listed successfully", product: newProduct});
 
     } catch (error) {
