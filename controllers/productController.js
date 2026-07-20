@@ -70,7 +70,13 @@ const createProduct = async (req, res) => {
 /*READ (all) - browse every product (public)*/
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const { categoryId, radius, status } = req.query || {}
+
+        // Find with optionally-provided parameters - uses conditional destructure method to not include undefined values altogether
+        const products = await Product.find({
+            ...(categoryId && { categoryId }),
+            ...(status && { status }),
+        });
 
         /*add the category + donor names to each product, one by one*/
         const productsWithNames = [];

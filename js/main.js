@@ -1,5 +1,34 @@
-document.addEventListener("DOMContentLoaded", () => {
+async function loadCategories() {
+    const response = await fetch(API_BASE_URL + "/api/categories", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const {categories} = await response.json();
+    return categories;
+}
+
+// On page load - fetch necessary data
+document.addEventListener("DOMContentLoaded", async () => {
+    // Load products
     loadProducts();
+
+    // Load categories
+    const categories = await loadCategories();
+    const filterCategory = document.getElementById("filter-category")
+    console.log(categories, filterCategory)
+    if (filterCategory) {
+        filterCategory.innerHTML = `<option value="">All Categories</option>`
+        categories.forEach(category => {
+            filterCategory.innerHTML += `<option value="${category._id}">${category.name}</option>`
+        })
+    }
     
     const filterForm = document.getElementById("advanced-filter-form");
     if (filterForm) {
@@ -34,7 +63,7 @@ async function loadProducts(queryString = '') {
             const card = document.createElement("div");
             card.className = "product-card";
             card.innerHTML = `
-                <img src="${product.imagePath || 'assets/default.jpg'}" alt="${product.title}">
+                <img src="${product.mediaPath || 'assets/default.jpg'}" alt="${product.title}" style="width: 100%; height: auto; object-fit: cover;">
                 <h3>${product.title}</h3>
                 <p>${product.description}</p>
                 <span class="badge ${product.status}">${product.status === 'available' ? 'Available for delivery' : 'Requested'}</span>
