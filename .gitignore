@@ -1,0 +1,7 @@
+#Ignore the heavy libraries folder
+node_modules/
+#Ignore the secret keys file
+.env
+#Ignore temporary operating system files
+.DS_Store
+Thumbs.db

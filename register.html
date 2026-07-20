@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShareIt - Register</title>
+    <link rel="stylesheet" href="css/auth-style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>ShareIt</h1>
+        <p>Join our community-driven collaborative economy platform</p>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">Product Catalog</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html" class="active" >Register</a></li>
+        </ul>
+    </nav>
+
+    <main class="container" style="justify-content: center; align-items: center; min-height: 55vh;">
+        
+        <section class="filter-sidebar" style="max-width: 450px; width: 100%;">
+            <h2>Create Account</h2>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="reg-name">Full Name:</label>
+                    <input type="text" id="reg-name" name="fullName" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email">Email Address:</label>
+                    <input type="email" id="reg-email" name="email" placeholder="user@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-city">City:</label>
+                    <input type="text" id="reg-city" name="city" placeholder="e.g., Tel Aviv" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-phone">Phone Number:</label>
+                    <input type="tel" id="reg-phone" name="phone" placeholder="e.g., 050-1234567" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-password">Password:</label>
+                    <input type="password" id="reg-password" name="password" placeholder="Create a secure password" required>
+                </div>
+
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+            
+            <div id="register-message" style="margin-top: 15px; text-align: center; font-weight: bold;"></div>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9rem;">
+                Already have an account? <a href="login.html" style="color: var(--secondary-color); text-decoration: none; font-weight: bold;">Log in here</a>
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
+    </footer>
+
+    <script src="js/constants/url.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const regForm = document.getElementById("register-form");
+            const regMessage = document.getElementById("register-message");
+
+            if (regForm) {
+                regForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(regForm);
+                    const data = Object.fromEntries(formData.entries());
+                    
+                    try {
+                        regMessage.style.color = "var(--dark-color)";
+                        regMessage.textContent = "Creating account...";
+
+                        const response = await fetch(API_BASE_URL + '/api/users/register', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            regMessage.style.color = "var(--primary-color)";
+                            regMessage.textContent = "Registration successful! Redirecting to login...";
+                            setTimeout(() => {
+                                window.location.href = "login.html";
+                            }, 2000);
+                        } else {
+                            regMessage.style.color = "var(--danger-color)";
+                            regMessage.textContent = result.message || "Registration failed. Try again.";
+                        }
+                    } catch (error) {
+                        console.error("Registration error:", error);
+                        regMessage.style.color = "var(--danger-color)";
+                        regMessage.textContent = "Server communication error.";
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

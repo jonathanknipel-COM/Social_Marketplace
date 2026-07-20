@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShareIt - Product Details</title>
+    <link rel="stylesheet" href="css/auth-style.css" />
+    <!-- Loading Google Maps script (replace YOUR_API_KEY) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+  </head>
+  <body>
+    <header class="main-header">
+      <h1>ShareIt</h1>
+      <p>Item details and pickup location</p>
+    </header>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html" class="active">Product Catalog</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+
+    <main class="container product-detail-layout">
+      <section class="product-info-card">
+        <!-- Product details that will be loaded asynchronously based on the URL ID -->
+        <div id="product-details">
+          <h2 id="product-title">Loading title...</h2>
+          <img id="product-image" src="" alt="Product image" class="detail-img" />
+          <p id="product-desc">Loading product description...</p>
+          <div class="product-meta">
+            <p><strong>Category:</strong> <span id="product-cat">-</span></p>
+            <p><strong>Status:</strong> <span id="product-status" class="badge">-</span></p>
+          </div>
+          <button id="action-btn" class="btn">Request to receive product (Purchase for 0 ₪)</button>
+        </div>
+      </section>
+
+      <!-- Advanced features and Web Services area -->
+      <aside class="product-services">
+        <!-- Feature A: Displaying pickup location on a dynamic map (Instructions requirement) -->
+        <div class="service-box">
+          <h3><i class="icon-map"></i> Product Location on Map</h3>
+          <div id="map-container" style="width: 100%; height: 250px; border-radius: 8px">
+            <!-- The dynamic map will be injected here using Google Maps API -->
+            <iframe
+              width="550"
+              height="350"
+              style="border: 0"
+              loading="lazy"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin"
+              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDZgHpEuLI41RVeUI2eMftMTyxS27XxSCA
+                        &q=Space+Needle,Seattle+WA"
+            >
+            </iframe>
+          </div>
+        </div>
+
+        <!-- Feature B: Consuming external web service (OpenWeatherMap API) for weather forecasting -->
+        <div class="service-box weather-box">
+          <h3><i class="icon-cloud"></i> Weather at Pickup Location</h3>
+          <div id="weather-container">
+            <p>Loading real-time weather data from server...</p>
+            <!-- Will be displayed here: temperature, description (rainy/sunny), and transport recommendation -->
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="main-footer">
+      <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
+    </footer>
+
+    <div
+      id="purcahse-form-dialog"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1000;
+        background-color: rgba(0, 0, 0, 0.4);
+        display: none;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        class="body"
+        style="width: 400px; height: max-content; background-color: #fff; padding: 20px; border-radius: 8px"
+      >
+        <h2 style="color: black">Purchase Form</h2>
+        <form id="purchase-form" style="color: black">
+          <label for="name" style="color: black">Your Name:</label>
+          <input type="text" id="name" name="name" required />
+          <label for="phone" style="color: black">Your Phone:</label>
+          <input type="text" id="phone" name="phone" required />
+          <label for="date-picker" style="color: black">Select Date:</label>
+          <input type="date" id="date-picker" name="date-picker" placeholder="click to select a date" />
+          <br /><br />
+          <div id="weather-info" style="
+            display: none;
+          ">
+            <h4>מזג אוויר לתאריך: <span id="w-date">-</span></h4>
+            <p>🌡️ טמפרטורה: <span id="w-temperature">-</span></p>
+            <p>☁️ מצב השמיים: <span id="w-description">-</span></p>
+          </div>
+          <br /><br />
+          <button type="button" id="cancel-btn">Cancel</button>
+          <button type="submit">Submit Request</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- JS file for handling product page, map, and weather -->
+    <script src="js/main.js"></script>
+    <script>
+      // Specific initialization code for the product page (extracts the ID from the URL and runs the functions)
+      document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const productId = urlParams.get("id")
+        if (productId) {
+          // Asynchronous functions to be implemented in main.js to fetch data from the server
+          loadProductDetail(productId)
+        }
+      })
+
+      const actionButton = document.getElementById("action-btn")
+      const cancelButton = document.getElementById("cancel-btn")
+      const purchaseFormDialog = document.getElementById("purcahse-form-dialog")
+      const purchaseForm = document.getElementById("purchase-form")
+      const datePicker = document.getElementById("date-picker")
+      const weatherInfo = document.getElementById("weather-info")
+
+      // Attach click event to purchase button - open dialog
+      actionButton.addEventListener("click", () => {
+        purchaseFormDialog.style.display = "flex"
+      })
+
+      // Attach click event to cancel button - close dialog
+      cancelButton.addEventListener("click", () => {
+        purchaseFormDialog.style.display = "none"
+      })
+
+      // Attach change event to date-picker - do nothing
+      datePicker.addEventListener("change", async (event) => {
+        const lat = 32.0167 // Latitude for Holon
+        const lon = 34.7833 // Longitude for Holon
+        const apiKey = "7218adc6398b307b126ac22e740cf8c7" // Replace with your actual API key
+        const lang = "he" // Language code for Hebrew
+        const units = "metric" // Use metric units for temperature
+
+        // const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`
+        const url = `https://api.openweathermap.org/data/4.0/onecall/current?lat=${lat}&lon=${lon}&appid=${apiKey}&lang=${lang}&units=${units}`;
+        const res = await fetch(url, { method: "GET" }) // send request to weather API
+        const data = await res.json() // parse json response from API
+        console.log(data)
+
+        // Display information below the date picker
+        weatherInfo.style.display = "block"
+        document.getElementById("w-date").textContent = event.target.value;
+        document.getElementById("w-temperature").textContent = data.data[0].temp + " °C";
+        document.getElementById("w-description").textContent = data.data[0].weather[0].description;
+      })
+
+      // Attach submit event to purchase form
+      purchaseForm.addEventListener("submit", (event) => {
+        event.preventDefault()
+
+        // Aggregate values via FormData and log
+        const formData = new FormData(event.target)
+        const name = formData.get("name")
+        const phone = formData.get("phone")
+        const date = formData.get("date-picker")
+        console.log({ name, phone, date })
+      })
+    </script>
+  </body>
+</html>
