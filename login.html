@@ -81,11 +81,13 @@
                         });
 
                         const result = await response.json();
+                        console.log('login response', result)
 
                         if (response.ok) {
                             // נניח שהשרת מחזיר את פרטי המשתמש בתוך האובייקט result
                             localStorage.setItem('currentUser', JSON.stringify(result.user));
-                            
+                            localStorage.setItem('token', result.token);
+
                             loginMessage.textContent = "Login successful! Redirecting...";
                             setTimeout(() => { window.location.href = "profile.html"; }, 1500);
                         } else {
