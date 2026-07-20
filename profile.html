@@ -75,23 +75,22 @@
         <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
     </footer>
 
-    <!-- Authenticated user loading logic and logout mechanism -->
+    <!-- Dedicated JS file that drives the canvas frame and handles D3 rendering -->
+    <script src="js/constants/url.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/user.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // 1. Fetch the authenticated user object from localStorage
-            const userDataString = localStorage.getItem('currentUser');
-            
-            if (userDataString) {
-                const user = JSON.parse(userDataString);
-                
-                // Inject real-time database values into the DOM
-                document.getElementById('user-name').textContent = user.name || "Not Provided";
-                document.getElementById('user-city').textContent = user.city || "Not Provided";
-                document.getElementById('user-phone').textContent = user.phone || "Not Provided";
-            } else {
-                // If no active session exists, restrict access and redirect to the login panel
-                window.location.href = "login.html";
-            }
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Authenticated user loading logic and logout mechanism
+            await loadUser()
+
+            // Inject user data to html
+            const user = getLoadedUser()
+
+            // Inject real-time database values into the DOM
+            document.getElementById('user-name').textContent = user.fullName || "Not Provided";
+            document.getElementById('user-city').textContent = user.city || "Not Provided";
+            document.getElementById('user-phone').textContent = user.phone || "Not Provided";
 
             // 2. Initialize the logout session listener
             const logoutLink = document.getElementById('logout-link');
@@ -106,10 +105,7 @@
                     window.location.href = "logout.html";
                 });
             }
-        });
+        })
     </script>
-
-    <!-- Dedicated JS file that drives the canvas frame and handles D3 rendering -->
-    <script src="js/dashboard.js"></script>
 </body>
 </html>
