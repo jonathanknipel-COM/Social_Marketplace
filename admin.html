@@ -20,7 +20,23 @@
         </ul>
     </nav>
 
-    <main class="container" style="flex-direction: column;">
+    <main class="container" style="flex-direction: column; gap: 20px;">
+        <!-- NEW D3.js STATISTICS SECTION -->
+        <div class="admin-table-container">
+            <h2 style="margin-top: 0; color: #1e293b; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">
+                Platform Statistics
+            </h2>
+            <div style="display: flex; gap: 40px; justify-content: space-around; padding-top: 20px;">
+                <div id="category-chart-container">
+                    <h3 style="color: #64748b; font-size: 1rem; text-align: center;">Total Items by Category</h3>
+                    <!-- Category D3 Chart will render here -->
+                </div>
+                <div id="delivery-chart-container">
+                    <h3 style="color: #64748b; font-size: 1rem; text-align: center;">Items Delivered</h3>
+                    <!-- Delivery D3 Chart will render here -->
+                </div>
+            </div>
+        </div>
         
         <div class="admin-table-container">
             <h2 style="margin-top: 0; color: #1e293b; border-bottom: 2px solid var(--border-color); padding-bottom: 10px;">
@@ -53,7 +69,11 @@
     <footer class="main-footer">
         <p>&copy; 2026 ShareIt - Secure Administrator Session</p>
     </footer>
-
+    <!-- ADD D3.js LIBRARY -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- ADD YOUR NEW STATS SCRIPT -->
+    <script src="/js/stats.js"></script>
+    
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             fetchUsersList();
