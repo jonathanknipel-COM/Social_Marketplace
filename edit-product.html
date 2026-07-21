@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShareIt - Edit Product</title>
+    <link rel="stylesheet" href="css/auth-style.css" />
+    <link rel="stylesheet" href="css/create-product.css" />
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: "AIzaSyDZgHpEuLI41RVeUI2eMftMTyxS27XxSCA",
+            v: "weekly",
+            // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+            // Add other bootstrap parameters as needed, using camel case.
+        });
+    </script>
+  </head>
+  <body>
+    <header class="main-header">
+      <h1>ShareIt</h1>
+      <p>Update product</p>
+    </header>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html" class="active">Product Catalog</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+
+    <main class="container product-detail-layout">
+      <section class="product-info-card" style="widtH: 40%;">
+        <form id="create-product">
+            <!-- title, description, mediaPath, categoryId, address, city, location -->
+             <h2>Create New Product</h2>
+             <label for="cp-title">Title:</label>
+             <input type="text" id="cp-title" name="cp-title" required />
+             <label for="cp-description">Description:</label>
+             <textarea id="cp-description" name="cp-description" required></textarea>
+             <label for="cp-mediaPath">Image URL:</label>
+             <input type="text" id="cp-mediaPath" name="cp-mediaPath" required />
+             <label for="cp-categoryId">Category:</label>
+             <select id="cp-categoryId" name="cp-categoryId" required>
+               <option value="">Select a category</option>
+             </select>
+             <label for="cp-address">Address:</label>
+             <div id="address-picker-input">
+                <input type="text" id="cp-address" name="cp-address" placeholder="Type any address..." required />
+                <div id="address-dropdown" style="display: none">
+                    <!-- Dynamically rendered options -->
+                </div>
+             </div>
+             <input type="submit" value="Edit Product" />
+        </form>
+          
+        </div>
+      </section>
+
+      <!-- Advanced features and Web Services area -->
+      <aside class="product-services">
+        <!-- Feature A: Displaying pickup location on a dynamic map (Instructions requirement) -->
+        <div class="service-box">
+          <h3><i class="icon-map"></i> Product Location on Map</h3>
+          <div id="map-container" style="width: 100%; height: 250px; border-radius: 8px">
+            <!-- The dynamic map will be injected here using Google Maps API -->
+            <gmp-map id="map" center="37.7749,-122.4194" zoom="10" style="width: 500px; height: 350px;"></gmp-map>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="main-footer">
+      <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
+    </footer>
+
+    <script src="js/constants/url.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Get elements
+        const categorySelect = document.getElementById("cp-categoryId");
+
+        // This function runs automatically once the script imports successfully
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Load product for edit and assign default values to input fields
+            const urlParams = new URLSearchParams(window.location.search)
+            const productId = urlParams.get("id")
+
+            // Fallback when ID is not provided in URL params
+            if (!productId) {
+                location.href = '/create-product.html'
+            }
+
+            const { Geocoder } = await google.maps.importLibrary("geocoding")
+            window.geocoder = new Geocoder()
+
+            // Load initial categories & populate the select element with categories
+            const categories = await loadCategories();
+            categorySelect.innerHTML = '';
+            categories.forEach(category => {
+                const option = document.createElement("option");
+                option.value = category._id;
+                option.textContent = category.name; // Assuming 'name' is the display name for the category
+                categorySelect.appendChild(option);
+            });
+
+            // Asynchronous functions to be implemented in main.js to fetch data from the server
+            const data = await loadProductDetail(productId)
+            const product = data.product
+
+            // Assign default values to input fields
+            document.getElementById("cp-title").value = product.title || "";
+            document.getElementById("cp-description").value = product.description || "";
+            document.getElementById("cp-mediaPath").value = product.mediaPath || "";
+            document.getElementById("cp-categoryId").value = product.categoryId || "";
+            document.getElementById("cp-address").value = product.address || "";
+        });
+
+        const addressInput = document.getElementById("cp-address");
+        const form = document.getElementById("create-product");
+
+        // Add change event to address-input - searches arbitraty location via Google's Geocoder
+        addressInput.addEventListener("change", async (event) => {
+            console.log("Address input changed:", event.target.value);
+            const address = event.target.value;
+            const response = await geocoder.geocode({ address });
+
+            if (response.results.length > 0) {
+                // Render dropdown with options
+                const dropdown = document.getElementById("address-dropdown");
+                dropdown.innerHTML = "";
+
+                // Iterate over results and render dropdown options
+                response.results.forEach((result) => {
+                    const option = document.createElement("div");
+                    option.textContent = result.formatted_address;
+
+                    // Add click event listner to option
+                    option.addEventListener("click", () => {
+                        // Set default value in text input
+                        addressInput.value = result.formatted_address;
+                        // Hide dropdown
+                        dropdown.style.display = "none";
+                        // Update map center to selected location
+                        const map = document.getElementById("map");
+                        const coords = {
+                            lat: result.geometry.location.lat(),
+                            lng: result.geometry.location.lng()
+                        };
+                        console.log("Selected coordinates:", coords);
+                        map.center = coords;
+                        map.style.display = "block"; // Ensure map is visible
+                    });
+
+                    // Add option element to options dropdown
+                    dropdown.appendChild(option);
+                });
+                dropdown.style.display = "block";
+            } else {
+                console.error("No results found for the given address.");
+            }
+        });
+    
+        // Add submit event - send payload to API
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            // Load product for edit and assign default values to input fields
+            const urlParams = new URLSearchParams(window.location.search)
+            const productId = urlParams.get("id")
+
+            // Fallback when ID is not provided in URL params
+            if (!productId) {
+                alert('Trying to update an empty product')
+                return
+            }
+
+            console.log(window.map?.center)
+            const payload = {
+                title: document.getElementById("cp-title").value,
+                description: document.getElementById("cp-description").value,
+                mediaPath: document.getElementById("cp-mediaPath").value,
+                categoryId: document.getElementById("cp-categoryId").value,
+                location: window.map?.center ? {
+                    lat: window.map.center.lat?.(),
+                    long: window.map.center.lng?.()
+                } : null, // If map center is not available, set coords to null
+                address: document.getElementById("cp-address").value,
+                city: 'random_city',
+            };
+
+            console.log("Submitting payload:", payload);
+
+            // Send payload to API endpoint
+            try {
+                const response = await fetch(API_BASE_URL + `/api/products/${productId}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        authorization: localStorage.getItem("token")
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log("Product updated successfully:", result);
+                location.href = '/profile.html'
+            } catch (err) {
+                console.error("Error submitting product:", err);
+                // Handle error (e.g., show error message to user)
+            }
+        });
+    </script>
+  </body>
+</html>
