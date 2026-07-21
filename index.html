@@ -10,7 +10,7 @@
 
     <!-- Semantic tags: header, nav -->
     <header class="main-header">
-        <h1>ShareIt</h1>
+        <img src="./assets/Shareit-Logo.png" alt="ShareIt logo" style="width: 350px; height: auto;"/>
         <p>A social marketplace platform based on the principle of the collaborative economy</p>
     </header>
 
@@ -57,12 +57,19 @@
         <main class="main-content">
             
             <!-- HTML5 Component: Video on the home page with an explanatory video (Instructions requirement) -->
-            <section class="video-section" style="display: none;">
-                <h3>How does it work? Watch a short video</h3>
-                <video id="promo-video" controls poster="assets/video-placeholder.jpg">
-                    <source src="assets/shareit-promo.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+            <section id="video-section">
+                <section id="expanded-video">
+                    <video id="promo-video" autoplay muted poster="assets/video-placeholder.jpg">
+                        <source src="./assets/סרטון תדמית ShareIt.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <button id="close-setup-player">
+                        X
+                    </button>
+                </section>
+                <button id="collapsed-reminder">
+                    ^
+                </button>
             </section>
 
             <!-- Semantic tag: section for the item catalog -->
@@ -82,8 +89,95 @@
         <p>&copy; 2026 ShareIt - Built as part of the Web Applications course</p>
     </footer>
 
+    <style>
+        #video-section {
+            all: unset;
+            width: max-content;
+            height: max-content;
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 999;
+            background: transparent;
+        }
+        
+        #video-section > #expanded-video {
+            width: max-content;
+            height: max-content;
+            padding: 5px;
+            border-radius: 10px;
+            background: #0005;
+            /* default styles */
+            display: none;
+        }
+
+        #video-section > #expanded-video > video {
+            width: 280px;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        #video-section > #expanded-video > #close-setup-player {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: calc(100% + .5rem);
+            right: .5rem;
+            padding: 0;
+            background: transparent;
+        }
+        #video-section > #expanded-video > #close-setup-player:hover,
+        #video-section > #expanded-video > #close-setup-player:click ,
+        #video-section > #expanded-video > #close-setup-player:focus {
+            background: transparent;
+            transform: none;
+            translate: none;
+            box-shadow: none;
+        }
+
+        #video-section > #collapsed-reminder {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            /* default styles */
+            display: none;
+        }
+    </style>
+
     <!-- Main JS file for catalog management and filtering -->
     <script src="js/constants/url.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        const expandedVideo = document.getElementById('expanded-video')
+        const collapsedReminder = document.getElementById('collapsed-reminder')
+        const closeSetupPlayerBtn = document.getElementById('close-setup-player')
+
+        // Add click event to close-setup-player button - collapses video
+        closeSetupPlayerBtn.addEventListener('click', () => {
+            expandedVideo.style.display = 'none';
+            collapsedReminder.style.display = 'block';
+            localStorage.setItem('isVideoPlayerCollapsed', 'true')
+        })
+        
+        // Add click event to collapsed-reminder button - brings video back
+        collapsedReminder.addEventListener('click', () => {
+            expandedVideo.style.display = 'flex';
+            collapsedReminder.style.display = 'none';
+            localStorage.setItem('isVideoPlayerCollapsed', 'false')
+        })
+
+        // Determine setup-videpo-player state from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const isVideoPlayerCollapsed = localStorage.getItem('isVideoPlayerCollapsed') === 'true'
+            collapsedReminder.style.display = isVideoPlayerCollapsed ? 'flex' : 'none'
+            expandedVideo.style.display = isVideoPlayerCollapsed ? 'none' : 'flex'
+        })
+    </script>
 </body>
 </html>

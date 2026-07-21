@@ -61,6 +61,9 @@
                         &q=Space+Needle,Seattle+WA"
             >
             </iframe>
+            <p id="location-description">
+              <!-- dynamic location descrition -->
+            </p>
           </div>
         </div>
 
@@ -146,6 +149,7 @@
           document.getElementById("product-status").textContent = product.status
           document.querySelector("#map-container iframe").src =
             `https://www.google.com/maps/embed/v1/place?key=AIzaSyDZgHpEuLI41RVeUI2eMftMTyxS27XxSCA&q=${product.location.lat},${product.location.long}`
+            document.getElementById('location-description').textContent = product.address
         }
       })
 

@@ -61,9 +61,18 @@ async function loadProducts(queryString = '') {
         console.log(data); // Log the products to the console for debugging
         data.products.forEach(product => {
             const card = document.createElement("div");
+            const mediaPath = product.mediaPath || 'assets/default.jpg'
+            const isVideo = mediaPath.endsWith('.mp4') || mediaPath.endsWith('.mov')
+            console.log({isVideo, mediaPath})
+
             card.className = "product-card";
+            card.style = "margin-bottom: 2rem;";
             card.innerHTML = `
-                <img src="${product.mediaPath || 'assets/default.jpg'}" alt="${product.title}" style="width: 100%; height: auto; object-fit: cover;">
+                ${
+                    isVideo
+                        ? `<video src="${mediaPath}" controls alt="${product.title}" style="width: 100%; height: auto; object-fit: cover;"></video>`
+                        : `<img src="${mediaPath}" alt="${product.title}" style="width: 100%; height: auto; object-fit: cover;"/>`
+                }
                 <h3>${product.title}</h3>
                 <p>${product.description}</p>
                 <span class="badge ${product.status}">${product.status === 'available' ? 'Available for delivery' : 'Requested'}</span>
