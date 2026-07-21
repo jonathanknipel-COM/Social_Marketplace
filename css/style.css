@@ -1,0 +1,257 @@
+/* Custom font per Requirement iv */
+@font-face {
+    font-family: 'CustomSecular';
+    src: url('../assets/SecularOne-Regular.ttf') format('truetype');
+}
+
+:root {
+    --primary-color: #27ae60;
+    --primary-hover: #219653;
+    --secondary-color: #3498db;
+    --dark-color: #2c3e50;
+    --light-color: #f8fafc;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --danger-color: #e74c3c;
+    --danger-hover: #c0392b;
+}
+
+body {
+    font-family: 'CustomSecular', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.6;
+}
+
+/* Header & Navigation Styling */
+.main-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* Text shadow effect per Requirement i */
+.main-header h1 {
+    font-size: 3.5rem;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+    font-weight: 800;
+}
+
+.main-header p {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.main-nav {
+    background-color: #1e293b;
+    border-top: 1px solid #334155;
+    padding: 10px 0;
+}
+
+.main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.main-nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.main-nav a:hover, .main-nav a.active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.main-nav a.active {
+    border-bottom: 3px solid var(--primary-color);
+    border-radius: 6px 6px 0 0;
+}
+
+/* Layout Container */
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    gap: 30px;
+    padding: 0 20px;
+}
+
+/* Sidebar Layout */
+.filter-sidebar {
+    flex: 1;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 16px; /* Rounded corners per Requirement v */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    height: fit-content;
+}
+
+.filter-sidebar h2, .filter-sidebar h3 {
+    margin-top: 0;
+    color: #1e293b;
+    font-size: 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    background-color: #f8fafc;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+.main-content {
+    flex: 3;
+}
+
+/* Multiple Columns Layout per Requirement iii */
+.products-grid {
+    column-count: 3;
+    column-gap: 25px;
+}
+
+.product-card {
+    background: var(--card-bg);
+    margin-bottom: 25px;
+    break-inside: avoid;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition per Requirement ii */
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 25px rgba(0,0,0,0.08);
+}
+
+.product-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* Component UI Buttons */
+.btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+}
+.btn-danger:hover {
+    background-color: var(--danger-hover);
+}
+
+/* Data Tables / Admin Panel Specifics */
+.admin-table-container {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.data-table th, .data-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-weight: 700;
+}
+
+.data-table tr:hover {
+    background-color: #f8fafc;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+.status-indicator.online { background-color: #2ecc71; }
+.status-indicator.offline { background-color: #95a5a6; }
+
+/* Footer */
+.main-footer {
+    text-align: center;
+    padding: 30px 20px;
+    background-color: #0f172a;
+    color: #64748b;
+    margin-top: 60px;
+    border-top: 1px solid #1e293b;
+}
