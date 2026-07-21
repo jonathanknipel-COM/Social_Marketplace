@@ -12,7 +12,7 @@ async function loadUser() {
             }
         }
 
-        const userId = currentUser._id
+        const userId = currentUser._id || currentUser.id
         const response = await fetch(API_BASE_URL + '/api/users/' + userId, {
             headers: {
                 'Content-Type': 'application/json',
@@ -29,6 +29,7 @@ async function loadUser() {
         localStorage.setItem('currentUser', JSON.stringify(data.user));
     } catch (err) {
         console.error('An error ocured while loading user data', err)
+        console.warn(err)
     }
 }
 

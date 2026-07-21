@@ -10,7 +10,8 @@
   </head>
   <body>
     <header class="main-header">
-      <h1>ShareIt</h1>
+      <img src="./assets/Shareit-Logo.png" alt="ShareIt logo" style="width: 350px; height: auto;"/>
+
       <p>Item details and pickup location</p>
     </header>
 
@@ -27,13 +28,9 @@
         <!-- Product details that will be loaded asynchronously based on the URL ID -->
         <div id="product-details">
           <h2 id="product-title">Loading title...</h2>
-          <img
-            id="product-image"
-            src=""
-            alt="Product image"
-            class="detail-img"
-            style="width: 100%; height: auto; border-radius: 8px"
-          />
+          <div id="product-thumbnail-container">
+            <!-- dynamic image/video processing -->
+          </div>
           <p id="product-desc">Loading product description...</p>
           <div class="product-meta">
             <p><strong>Category:</strong> <span id="product-cat">-</span></p>
@@ -122,6 +119,21 @@
       </div>
     </div>
 
+    <!--  -->
+    <style>
+      .product-thumbnail-container {
+        width: 100%;
+        height: max-content;
+      }
+
+      img.product-thumbnail,
+      video.product-thumbnail {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
+    </style>
+
     <!-- JS file for handling product page, map, and weather -->
     <script src="js/constants/url.js"></script>
     <script src="js/main.js"></script>
@@ -143,13 +155,31 @@
 
           // Embed data in info section
           document.getElementById("product-title").textContent = product.name
-          document.getElementById("product-image").src = product.mediaPath
           document.getElementById("product-desc").textContent = product.description
           document.getElementById("product-cat").textContent = product.categoryName
           document.getElementById("product-status").textContent = product.status
           document.querySelector("#map-container iframe").src =
             `https://www.google.com/maps/embed/v1/place?key=AIzaSyDZgHpEuLI41RVeUI2eMftMTyxS27XxSCA&q=${product.location.lat},${product.location.long}`
-            document.getElementById('location-description').textContent = product.address
+          document.getElementById('location-description').textContent = product.address
+
+          // Special handling for product thumbnail
+          const productThumbnaliContainer = document.getElementById("product-thumbnail-container")
+          productThumbnaliContainer.innerHTML = ''
+          if (product.mediaPath.endsWith('.mp4') || product.mediaPath.endsWith('.mov')) {
+            const videoElement = document.createElement('video')
+            videoElement.src = product.mediaPath
+            videoElement.classList.add('product-thumbnail')
+            videoElement.controls = true
+            videoElement.autoplay = true
+            videoElement.muted = true
+            productThumbnaliContainer.appendChild(videoElement)
+          } else {
+            const imgElement = document.createElement('img')
+            imgElement.src = product.mediaPath
+            imgElement.alt = product.title
+            imgElement.classList.add('product-thumbnail')
+            productThumbnaliContainer.appendChild(imgElement)
+          }
         }
       })
 
