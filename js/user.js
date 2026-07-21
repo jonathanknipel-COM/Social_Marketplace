@@ -12,7 +12,7 @@ async function loadUser() {
             }
         }
 
-        const userId = currentUser.id
+        const userId = currentUser._id
         const response = await fetch(API_BASE_URL + '/api/users/' + userId, {
             headers: {
                 'Content-Type': 'application/json',

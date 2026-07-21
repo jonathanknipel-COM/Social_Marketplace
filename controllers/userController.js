@@ -1,6 +1,8 @@
 const User = require('../models/User');
+const Product = require('../models/Product');
 const bcrypt = require('bcrypt'); //encryption tool
 const {getLoggedInUser} = require('../utils/auth'); //tells us who is making the request
+const {buildProductView} = require('../utils/product'); //tells us who is making the request
 
 const registerUser = async(req, res) => {
     try {
@@ -74,8 +76,16 @@ const getUserById = async (req, res) => {
             return res.status(404).json({message: "User not found."});
         }
 
-        const safeUser = user.toObject();
-        delete safeUser.password; //never expose the scrambled password
+        const products = await Product.find({
+            donatedBy: user._id
+        })
+
+        const safeUser = {
+            ...user.toObject(),
+            password: undefined,
+            products,
+        }
+
         res.status(200).json({user: safeUser});
 
     } catch (error) {

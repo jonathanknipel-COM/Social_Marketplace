@@ -69,17 +69,121 @@
             </div>
         </section>
 
+        <section id="products-list-container">
+            <h3>Products List</h3>
+            <div id="products-list">
+                <!-- Dynamic list -->
+            </div>
+        </section>
+
     </main>
 
     <footer class="main-footer">
         <p>&copy; 2026 ShareIt - Built as part of the Web Applications Development course</p>
     </footer>
 
+    <style>
+        main.container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+        }
+
+        main.container .user-profile-info {
+            grid-row: 1 / 3;
+            grid-column: 1 / 2;
+        }
+
+        main.container #products-list-container {
+            height: max-content;
+        }
+
+        main.container #products-list-container > #products-list {
+            width: 100%;
+            max-height: 20rem;
+            overflow: hidden auto;
+            height: max-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-right: 1rem;
+        }
+
+        /* Same as: */
+        /* main.container #products-list-container > #products-list > .product-item */
+        .product-item {
+            width: 100%;
+            height: 5rem;
+            min-height: 5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1rem;
+        }
+
+        .product-item > img {
+            width: 3.2rem;
+            height: 3.2rem;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 5px;
+        }
+
+        .product-item > p {
+            font-size: 14px;
+            color: white;
+        }
+
+        .product-item > .actions-container {
+            width: max-content;
+            height: max-content;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .product-item > .actions-container > button {
+            width: max-content;
+            height: max-content;
+            padding: 8px;
+            font-size: 12px;
+        }
+    </style>
+
     <!-- Dedicated JS file that drives the canvas frame and handles D3 rendering -->
     <script src="js/constants/url.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/user.js"></script>
     <script>
+        async function editProduct(id) {
+            location.href = `/edit-product.html?id=${id}`
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Are you sure you want to delete this product?')) {
+                return
+            }
+
+            try {
+                const response = await fetch(API_BASE_URL + `/api/products/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        authorization: localStorage.getItem("token")
+                    }
+                })
+
+                if (!response.ok) {
+                    throw new Error('Something went wrong')
+                }
+
+                // Delete the product tem associated with the ID
+                document.getElementById(`product-item-${id}`).remove()
+            } catch (err) {}
+        }
+
         document.addEventListener('DOMContentLoaded', async () => {
             // Authenticated user loading logic and logout mechanism
             await loadUser()
@@ -105,6 +209,52 @@
                     window.location.href = "logout.html";
                 });
             }
+        
+            // Inject products in list
+            const productsList = document.getElementById('products-list')
+            productsList.innerHTML = ''
+            const products = [
+                ...user.products,
+            ]
+            products.forEach(product => {
+                const productItemElement = document.createElement('div')
+                productItemElement.classList.add('product-item')
+                productItemElement.id = `product-item-${product._id}`
+                
+                // 1. Create image subcomponent
+                const productImg = document.createElement('img')
+                productImg.src = product.mediaPath || './assets/No-image.jpg'
+                productImg.alt = product.title
+                
+                // 2. Create title subcomponent
+                const productTitle = document.createElement('p')
+                productTitle.textContent = product.title
+                
+                // 3. Create actions container subcomponent
+                const actionsContainer = document.createElement('div')
+                actionsContainer.classList.add('actions-container')
+
+                // 3.1. Add edit button to actions-container
+                const btn_editProduct = document.createElement('button')
+                btn_editProduct.textContent = 'Edit'
+                btn_editProduct.addEventListener('click', () => editProduct(product._id))
+                actionsContainer.append(btn_editProduct)
+                
+                // 3.2. Add delete button to actions-container
+                const btn_deleteProduct = document.createElement('button')
+                btn_deleteProduct.textContent = 'Delete'
+                btn_deleteProduct.addEventListener('click', () => deleteProduct(product._id))
+                actionsContainer.append(btn_deleteProduct)
+
+                // 4. Append subcomponents to product item
+                productItemElement.appendChild(productImg)
+                productItemElement.appendChild(productTitle)
+                productItemElement.appendChild(actionsContainer)
+                
+                // 5. Append item to list
+                productsList.appendChild(productItemElement)
+            })
+            
         })
     </script>
 </body>

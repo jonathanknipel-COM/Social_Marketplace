@@ -2,6 +2,7 @@ const Product = require('../models/Product');
 const Category = require('../models/Category');
 const User = require('../models/User');
 const {getLoggedInUser} = require('../utils/auth');
+const {buildProductView} = require('../utils/product');
 const { TwitterApi } = require('twitter-api-v2');
 
 // Initialize Twitter Client
@@ -11,20 +12,6 @@ const twitterClient = new TwitterApi({
     accessToken: process.env.TWITTER_ACCESS_TOKEN,
     accessSecret: process.env.TWITTER_ACCESS_SECRET,
 });
-
-/*
- * helper: take a product and attach the category name + donor name using basic
- * findById lookups. this does by hand what mongoose's .populate() does for us.
- */
-const buildProductView = async (product) => {
-    const category = await Category.findById(product.categoryId);
-    const donor = await User.findById(product.donatedBy);
-    return {
-        ...product.toObject(), //the product's own fields
-        categoryName: category ? category.name : null,
-        donorName: donor ? donor.fullName : null
-    };
-};
 
 /* ============================================================
  *  SECTIONS 21 + 22 - FULL CRUD FOR PRODUCTS
