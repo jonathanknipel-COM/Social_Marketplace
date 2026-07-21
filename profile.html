@@ -6,7 +6,8 @@
     <title>ShareIt - Profile & Statistics</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Loading D3.js library for charts development (Mandatory per section 33.i) -->
-    <script src="https://d3js.org/v7.min.js"></script>
+    <!-- <script src="https://d3js.org/v7.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <!-- Relative absolute link to the unified external CSS file -->
     <link rel="stylesheet" href="css/auth-style.css">
 </head>
@@ -155,7 +156,7 @@
 
     <!-- Dedicated JS file that drives the canvas frame and handles D3 rendering -->
     <script src="js/constants/url.js"></script>
-    <script src="js/dashboard.js"></script>
+    <script src="js/dashboard.js" defer></script>
     <script src="js/user.js"></script>
     <script>
         async function editProduct(id) {

@@ -44,65 +44,138 @@ function drawContributionMedal() {
 // Creating charts using the D3.js library (Requirement i)
 async function renderD3Charts() {
     try {
-        // Fetching GroupBy data from the server
-        const response = await fetch('/api/stats/summary');
-        const statsData = await response.json(); 
-        // Expected structure: { categoriesCount: [...], monthlySales: [...] }
+        // Fetch category aggregation and delivery aggregation separately
+        const [categoryRes, deliveryRes] = await Promise.all([
+            fetch(API_BASE_URL + '/api/products/stats/by-category'),
+            fetch(API_BASE_URL + '/api/products/stats/delivered-by-city-month')
+        ]);
+
+        if (!categoryRes.ok) {
+            throw new Error(`Category stats fetch failed: ${categoryRes.status} ${categoryRes.statusText}`);
+        }
+        if (!deliveryRes.ok) {
+            throw new Error(`Delivery stats fetch failed: ${deliveryRes.status} ${deliveryRes.statusText}`);
+        }
+
+        const categoryData = await categoryRes.json();
+        const deliveryData = await deliveryRes.json();
+
+        const categories = categoryData.results || [];
+        const deliveries = deliveryData.results || [];
 
         // --- Chart 1: Item distribution by category (Pie chart) ---
-        const width = 300, height = 300, radius = Math.min(width, height) / 2;
+        const width = 200;
+        const height = 200;
+        const radius = Math.min(width, height) / 2;
+
         const svg1 = d3.select("#chart-categories")
-            .append("svg")
+            .selectAll("svg")
+            .data([null])
+            .join("svg")
             .attr("width", width)
             .attr("height", height)
-            .append("g")
+            .selectAll("g")
+            .data([null])
+            .join("g")
             .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
         const color = d3.scaleOrdinal(d3.schemeCategory10);
-        const pie = d3.pie().value(d5 => d5.count);
+        const pie = d3.pie().value(d => d.totalProducts);
         const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
-        const arcs = svg1.selectAll("arc")
-            .data(pie(statsData.categoriesCount))
-            .enter()
-            .append("g");
+        const arcs = svg1.selectAll("g.arc")
+            .data(pie(categories))
+            .join("g")
+            .attr("class", "arc");
 
         arcs.append("path")
             .attr("d", arc)
-            .attr("fill", d => color(d.data._id)); // _id represents the category name from GroupBy
+            .attr("fill", d => color(d.data.categoryName || d.data.categoryId));
+
+        arcs.append("text")
+            .attr("transform", d => `translate(${arc.centroid(d)})`)
+            .attr("text-anchor", "middle")
+            .attr("font-size", "10px")
+            .selectAll("tspan")
+            .data(d => [
+                { text: d.data.categoryName || d.data.categoryId, dy: "-0.35em", fill: "#fff" },
+                { text: `${d.data.totalProducts}`, dy: "1em", fill: "#fff" }
+            ])
+            .join("tspan")
+            .attr("x", 0)
+            .attr("dy", d => d.dy)
+            .attr("fill", d => d.fill)
+            .text(d => d.text);
+
+        arcs.append("title")
+            .text(d => `${d.data.categoryName}: ${d.data.totalProducts}`);
 
         // --- Chart 2: Quantity of items delivered throughout the months of the year (Bar chart) ---
-        const margin = {top: 20, right: 20, bottom: 30, left: 40};
-        const bcWidth = 400 - margin.left - margin.right;
-        const bcHeight = 250 - margin.top - margin.bottom;
+        const monthNames = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+
+        const monthlyTotals = deliveries.reduce((acc, item) => {
+            const year = item._id?.year;
+            const month = item._id?.month;
+            if (year && month) {
+                const label = `${monthNames[month - 1]} ${year}`;
+                acc[label] = (acc[label] || 0) + item.totalDelivered;
+            }
+            return acc;
+        }, {});
+
+        const monthlyChartData = Object.entries(monthlyTotals)
+            .map(([month, totalDelivered]) => ({ month, totalDelivered }))
+            .sort((a, b) => {
+                const [aMonth, aYear] = a.month.split(' ');
+                const [bMonth, bYear] = b.month.split(' ');
+                return (parseInt(aYear) - parseInt(bYear)) || (monthNames.indexOf(aMonth) - monthNames.indexOf(bMonth));
+            });
+
+        const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+        const bcWidth = 420 - margin.left - margin.right;
+        const bcHeight = 260 - margin.top - margin.bottom;
 
         const svg2 = d3.select("#chart-monthly")
-            .append("svg")
+            .selectAll("svg")
+            .data([null])
+            .join("svg")
             .attr("width", bcWidth + margin.left + margin.right)
             .attr("height", bcHeight + margin.top + margin.bottom)
-            .append("g")
+            .selectAll("g")
+            .data([null])
+            .join("g")
             .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        const x = d3.scaleBand().rangeRound([0, bcWidth]).padding(0.1)
-            .domain(statsData.monthlySales.map(d => d.month));
-        const y = d3.scaleLinear().rangeRound([bcHeight, 0])
-            .domain([0, d3.max(statsData.monthlySales, d => d.count)]);
+        const x = d3.scaleBand()
+            .domain(monthlyChartData.map(d => d.month))
+            .range([0, bcWidth])
+            .padding(0.1);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(monthlyChartData, d => d.totalDelivered) || 1])
+            .range([bcHeight, 0]);
 
         svg2.append("g")
             .attr("transform", `translate(0, ${bcHeight})`)
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+            .attr("transform", "rotate(-35)")
+            .attr("text-anchor", "end");
 
         svg2.append("g")
             .call(d3.axisLeft(y));
 
-        svg2.selectAll(".bar")
-            .data(statsData.monthlySales)
-            .enter().append("rect")
+        svg2.selectAll("rect.bar")
+            .data(monthlyChartData)
+            .join("rect")
             .attr("class", "bar")
             .attr("x", d => x(d.month))
-            .attr("y", d => y(d.count))
+            .attr("y", d => y(d.totalDelivered))
             .attr("width", x.bandwidth())
-            .attr("height", d => bcHeight - y(d.count))
+            .attr("height", d => bcHeight - y(d.totalDelivered))
             .attr("fill", "#3498db");
 
     } catch (err) {
