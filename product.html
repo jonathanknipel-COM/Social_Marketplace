@@ -108,7 +108,7 @@
           <label for="phone" style="color: black">Your Phone:</label>
           <input type="text" id="phone" name="phone" required />
           <label for="date-picker" style="color: black">Select Date:</label>
-          <input type="date" id="date-picker" name="date-picker" placeholder="click to select a date" />
+          <input type="date" id="date-picker" name="date" placeholder="click to select a date" />
           <br /><br />
           <div id="weather-info" style="display: none">
             <h4>מזג אוויר לתאריך: <span id="w-date">-</span></h4>
@@ -192,15 +192,43 @@
       })
 
       // Attach submit event to purchase form
-      purchaseForm.addEventListener("submit", (event) => {
+      purchaseForm.addEventListener("submit", async (event) => {
         event.preventDefault()
+
+        const urlParams = new URLSearchParams(window.location.search)
+        const productId = urlParams.get("id")
+
+        if (!productId) {
+          alert('No product is being purchased right now.')
+          return
+        }
 
         // Aggregate values via FormData and log
         const formData = new FormData(event.target)
         const name = formData.get("name")
         const phone = formData.get("phone")
-        const date = formData.get("date-picker")
-        console.log({ name, phone, date })
+        const date = formData.get("date")
+
+        const payload = { name, phone, date }
+        console.log(payload)
+
+        try {
+          const response = await fetch(API_BASE_URL + `/api/products/${productId}/purchase`, {
+            method: 'POST',
+            headers: {
+              'Content-type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          })
+          const data = await response.json()
+
+          console.log(data)
+          alert('Product has been purchased successfully!')
+
+          document.getElementById("product-status").textContent = 'ordered'
+        } catch (err) {
+          console.error('An error has occured: ', err)
+        }
       })
     </script>
   </body>

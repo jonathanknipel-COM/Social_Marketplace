@@ -75,7 +75,7 @@ const getAllProducts = async (req, res) => {
         // Find with optionally-provided parameters - uses conditional destructure method to not include undefined values altogether
         const products = await Product.find({
             ...(categoryId && { categoryId }),
-            ...(status && { status }),
+            ...(status && status !== 'all' && { status }),
         });
 
         /*add the category + donor names to each product, one by one*/
@@ -260,6 +260,36 @@ const countDeliveredByCityAndMonth = async (req, res) => {
     }
 };
 
+/* product purchase handling */
+const purchaseProduct = async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({message: "Product not found."});
+        }
+
+        const { name, phone, date } = req.body
+
+        if (!name || !phone || !date) {
+            return res.status(400).json({message: 'Details not complete.'})
+        }
+
+        product.status = 'ordered'
+        product.buyerDetails = {
+            name,
+            phone,
+            date
+        }
+
+        await product.save()
+
+        res.status(200).json({message: "Product purchased successfully", product});
+
+    } catch (error) {
+        res.status(500).json({message: "Server error", error: error.message});
+    }
+};
+
 module.exports = {
     createProduct,
     getAllProducts,
@@ -268,5 +298,6 @@ module.exports = {
     deleteProduct,
     searchProducts,
     countProductsByCategory,
-    countDeliveredByCityAndMonth
+    countDeliveredByCityAndMonth,
+    purchaseProduct
 };

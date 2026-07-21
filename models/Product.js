@@ -15,6 +15,15 @@ const productSchema = new mongoose.Schema({
         type: String //link to picture or image of the product being given away
     },
 
+    buyerDetails: {
+        type: {
+            name: String,
+            phone: String,
+            date: String
+        },
+        default: null
+    },
+
     categoryId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',

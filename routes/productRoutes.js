@@ -8,7 +8,8 @@ const {
     deleteProduct,
     searchProducts,
     countProductsByCategory,
-    countDeliveredByCityAndMonth
+    countDeliveredByCityAndMonth,
+    purchaseProduct
 } = require('../controllers/productController');
 
 /*
@@ -31,5 +32,8 @@ router.get('/:id', getProductById);     //view one - public
 router.post('/', createProduct);
 router.put('/:id', updateProduct);
 router.delete('/:id', deleteProduct);
+
+/*--- product purchase handling --- */
+router.post('/:id/purchase', purchaseProduct)
 
 module.exports = router;
